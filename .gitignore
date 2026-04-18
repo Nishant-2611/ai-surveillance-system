@@ -42,3 +42,8 @@ Thumbs.db
 # Logs
 *.log
 logs/
+
+# Other Projects
+camera/
+program files/
+spring-boot-login-example-master/
