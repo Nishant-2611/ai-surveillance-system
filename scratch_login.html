@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SENTINEL_HUD | ACCESS_PORTAL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed-variant": "#004e60",
+                        "primary": "#a5e7ff",
+                        "primary-fixed-dim": "#47d6ff",
+                        "on-primary-fixed": "#001f28",
+                        "on-primary": "#003543",
+                        "surface-container-low": "#1c1b1d",
+                        "on-secondary-fixed": "#181c25",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary": "#680015",
+                        "on-primary-container": "#00566a",
+                        "surface-variant": "#353437",
+                        "secondary-fixed": "#dfe2ef",
+                        "error": "#ffb4ab",
+                        "surface-bright": "#39393b",
+                        "surface": "#131315",
+                        "error-container": "#93000a",
+                        "inverse-primary": "#00677f",
+                        "inverse-surface": "#e5e1e4",
+                        "surface-container-high": "#2a2a2c",
+                        "on-secondary": "#2c303a",
+                        "tertiary-fixed-dim": "#ffb3b3",
+                        "background": "#131315",
+                        "surface-container": "#201f21",
+                        "secondary": "#c3c6d3",
+                        "surface-container-lowest": "#0e0e10",
+                        "on-surface-variant": "#bbc9cf",
+                        "on-tertiary-fixed": "#400009",
+                        "secondary-fixed-dim": "#c3c6d3",
+                        "on-secondary-container": "#b5b8c5",
+                        "tertiary-fixed": "#ffdad9",
+                        "tertiary-container": "#ffabab",
+                        "on-error": "#690005",
+                        "on-background": "#e5e1e4",
+                        "on-surface": "#e5e1e4",
+                        "outline": "#859399",
+                        "surface-dim": "#131315",
+                        "surface-tint": "#47d6ff",
+                        "on-secondary-fixed-variant": "#434751",
+                        "inverse-on-surface": "#313032",
+                        "surface-container-highest": "#353437",
+                        "outline-variant": "#3c494e",
+                        "primary-container": "#00d2ff",
+                        "primary-fixed": "#b6ebff",
+                        "secondary-container": "#454953",
+                        "on-tertiary-fixed-variant": "#920021",
+                        "tertiary": "#ffd2d2",
+                        "on-tertiary-container": "#a20026"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .bg-grid-pattern {
+            background-image: radial-gradient(circle at 2px 2px, rgba(165, 231, 255, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body overflow-hidden">
+<!-- Background Layer with Neural Pattern/Grid -->
+<div class="fixed inset-0 z-0">
+<div class="absolute inset-0 bg-grid-pattern"></div>
+<div class="absolute inset-0 bg-gradient-to-tr from-surface via-surface/90 to-primary/5"></div>
+<img class="absolute inset-0 w-full h-full object-cover opacity-10 mix-blend-screen filter blur-sm" data-alt="abstract neural network visualization with flowing cyan digital lines and deep obsidian space background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBK2aOmfUbfwAmgsyyrF4B07tloqbDYhahSSYlDM5hBWjsNKFQPw-f61TE5cTeLUQMbVUlQA8eEliJThOphEXQ0UhKvs5TSusseGpK2M6ORuq_9rE7rPyiqySN0NDb7IO3oJ5I2vJzHj4TcEk5RBJd2kUrd_iJdQntMHj47jzt2oiAPDp3Y2aCajKyhA4nphR23a4DBPr7L_3qI7PpZs3hB8CMA_IBUckQcAM-4dvRkjLUCoy-sg2Ptnbzq83GwaGA8hlQM7XIGWYs"/>
+</div>
+<!-- Main Content Canvas -->
+<main class="relative z-10 flex min-h-screen items-center justify-center p-6">
+<!-- Login Card: Asymmetric Layout & Depth -->
+<div class="w-full max-w-[480px] flex flex-col gap-1">
+<!-- System Identity Header -->
+<header class="mb-8 flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 bg-gradient-to-br from-primary to-primary-container flex items-center justify-center rounded-sm shadow-[0_0_20px_rgba(0,210,255,0.3)]">
+<span class="material-symbols-outlined text-on-primary-fixed text-3xl" data-icon="security" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div class="flex flex-col">
+<h1 class="font-headline text-2xl font-bold tracking-tighter uppercase text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-fixed">
+                            SENTINEL_HUD
+                        </h1>
+<p class="font-label text-[10px] uppercase tracking-[0.2em] text-primary-fixed-dim/70">
+                            AI_SMART_SURVEILLANCE_v4.2
+                        </p>
+</div>
+</div>
+</header>
+<!-- Card Container -->
+<section class="bg-surface-container-low/80 backdrop-blur-2xl p-10 relative group">
+<!-- Ghost Border effect using shadow and subtle outline -->
+<div class="absolute inset-0 border border-outline-variant/15 pointer-events-none"></div>
+<div class="mb-10">
+<h2 class="font-headline text-3xl font-light tracking-tight text-on-surface">OPERATOR_LOGIN</h2>
+<div class="h-1 w-12 bg-primary-container mt-2"></div>
+</div>
+<form class="space-y-8">
+<!-- Email / Username Input -->
+<div class="relative flex flex-col">
+<label class="font-label text-[11px] font-bold uppercase tracking-widest text-on-surface-variant mb-2" for="identity">
+                            IDENTITY_RECOGNITION
+                        </label>
+<div class="flex items-center bg-surface-container-high group-focus-within:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined px-4 text-on-surface-variant text-xl" data-icon="alternate_email">alternate_email</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-sm font-medium py-4 text-primary-fixed tracking-wide placeholder:text-outline/50 uppercase" id="identity" name="identity" placeholder="EMAIL_OR_USERNAME" type="text"/>
+</div>
+</div>
+<!-- Password Input -->
+<div class="relative flex flex-col">
+<label class="font-label text-[11px] font-bold uppercase tracking-widest text-on-surface-variant mb-2" for="credential">
+                            ENCRYPTED_KEY_PHRASE
+                        </label>
+<div class="flex items-center bg-surface-container-high group-focus-within:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined px-4 text-on-surface-variant text-xl" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-sm font-medium py-4 text-primary-fixed tracking-wide placeholder:text-outline/50" id="credential" name="credential" placeholder="••••••••••••" type="password"/>
+</div>
+</div>
+<!-- Actions Row -->
+<div class="flex items-center justify-between">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 bg-surface-container-highest border-outline-variant rounded-sm text-primary focus:ring-primary/20 focus:ring-offset-0" type="checkbox"/>
+<span class="font-label text-[11px] uppercase tracking-wider text-on-surface-variant group-hover:text-on-surface transition-colors">PERSIST_SESSION</span>
+</label>
+<a class="font-label text-[11px] uppercase tracking-wider text-primary-fixed-dim hover:text-primary transition-colors hover:underline decoration-primary/30 underline-offset-4" href="#">
+                            LOST_ACCESS_KEY?
+                        </a>
+</div>
+<!-- Submit Button: Radiant Glow Texture -->
+<button class="w-full group relative overflow-hidden bg-gradient-to-br from-primary to-primary-container p-4 rounded-sm transition-all duration-300 active:scale-[0.98]" type="submit">
+<div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="relative font-headline font-bold text-on-primary-fixed text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-2">
+                            INITIATE_UPLINK
+                            <span class="material-symbols-outlined text-lg" data-icon="bolt" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</span>
+</button>
+</form>
+<!-- Footer / Secondary Actions -->
+<footer class="mt-12 flex justify-center border-t border-outline-variant/10 pt-6">
+<p class="font-label text-[10px] text-on-surface-variant/50 uppercase tracking-widest text-center leading-relaxed">
+                        SECURE_PORTAL_ENCRYPTION_ACTIVE<br/>
+                        AES_256_GCM | SYSTEM_ID: HUD_ALPHA_9
+                    </p>
+</footer>
+</section>
+<!-- Corner Accents (Intentional Asymmetry) -->
+<div class="flex justify-between items-end px-2 opacity-30">
+<div class="w-16 h-[2px] bg-primary"></div>
+<div class="font-label text-[9px] text-primary uppercase">LAT: 37.7749° N | LONG: 122.4194° W</div>
+</div>
+</div>
+</main>
+<!-- Global System Overlay (HUD Elements) -->
+<div class="fixed top-8 right-8 z-50 pointer-events-none">
+<div class="flex flex-col items-end gap-1">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+<span class="font-label text-[10px] text-primary tracking-widest uppercase">CONNECTION_STABLE</span>
+</div>
+<div class="font-label text-[10px] text-on-surface-variant uppercase opacity-50 tracking-tighter">BITRATE: 48.2 GBPS</div>
+</div>
+</div>
+<div class="fixed bottom-8 left-8 z-50 pointer-events-none">
+<div class="w-24 h-24 border-l border-b border-primary/20 opacity-40"></div>
+</div>
+</body></html>

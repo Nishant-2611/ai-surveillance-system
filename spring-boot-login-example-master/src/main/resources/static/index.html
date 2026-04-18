@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Security Camera - Raspberry Pi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: #2c3e50;
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .header p {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .video-section {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            order: 1;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: #000;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .video-stream {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            image-rendering: optimizeSpeed;
+        }
+
+        .status-overlay {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .status-live {
+            background-color: #4CAF50;
+        }
+
+        .status-recording {
+            background-color: #f44336;
+        }
+
+        .status-motion {
+            background-color: #ff9800;
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #ecf0f1;
+            color: #2c3e50;
+            border: 1px solid #bdc3c7;
+        }
+
+        .btn-secondary:hover {
+            background: #d5dbdb;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            order: 2;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            margin-bottom: 12px;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+
+        .config-item {
+            margin-bottom: 12px;
+        }
+
+        .config-item label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+            color: #34495e;
+            font-size: 0.9em;
+        }
+
+        .config-item input,
+        .config-item select {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 0.85em;
+            transition: border-color 0.2s ease;
+        }
+
+        .config-item input:focus,
+        .config-item select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .recordings-list {
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .recording-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid #ecf0f1;
+            transition: background-color 0.2s ease;
+        }
+
+        .recording-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .recording-item:last-child {
+            border-bottom: none;
+        }
+
+        .recording-info {
+            flex: 1;
+        }
+
+        .recording-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 3px;
+            font-size: 0.9em;
+        }
+
+        .recording-meta {
+            font-size: 0.75em;
+            color: #7f8c8d;
+        }
+
+        .recording-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .btn-small {
+            padding: 4px 8px;
+            font-size: 0.75em;
+            border-radius: 12px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 12px;
+            background: #ecf0f1;
+            border-radius: 6px;
+        }
+
+        .stat-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            color: #7f8c8d;
+            margin-top: 3px;
+        }
+
+        @media (min-width: 768px) {
+            .main-content {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 5px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .video-container {
+                height: 250px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            color: #7f8c8d;
+            font-size: 1em;
+            padding: 20px;
+        }
+
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            padding: 15px;
+            background: #fadbd8;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<script src="/js/script.js"></script>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔒 Security Camera System</h1>
+            <p>Motion-Activated Recording for Raspberry Pi 4</p>
+        </div>
+
+        <div class="main-content">
+            <div class="video-section">
+                <div class="video-container">
+                    <img src="/video_feed" class="video-stream" alt="Live Camera Feed">
+                    <div class="status-overlay">
+                        <span class="status-indicator status-live"></span>
+                        <span id="status-text">Live</span>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-primary" onclick="toggleRecording()">
+                        <span id="record-btn-text">Start Recording</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="refreshStatus()">
+                        Refresh Status
+                    </button>
+                    <button class="btn btn-secondary" onclick="downloadLatest()">
+                        Download Latest
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="card">
+                    <h3>🚨 Detection Alerts</h3>
+
+                    <div id="alert">No alerts</div>
+
+                    <ul id="recentEvents"></ul>
+
+                </div>
+                <div class="card">
+                    <h3>📊 System Status</h3>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="uptime">--</div>
+                            <div class="stat-label">Uptime</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="recordings-count">--</div>
+                            <div class="stat-label">Recordings</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>⚙️ Configuration</h3>
+                    <div class="config-item">
+                        <label for="sensitivity">Motion Sensitivity</label>
+                        <input type="range" id="sensitivity" min="0.1" max="1" step="0.1" value="0.3">
+                    </div>
+                    <div class="config-item">
+                        <label for="recording-duration">Recording Duration (sec)</label>
+                        <input type="number" id="recording-duration" min="5" max="60" value="10">
+                    </div>
+                    <div class="config-item">
+                        <label for="cooldown">Cooldown Period (sec)</label>
+                        <input type="number" id="cooldown" min="1" max="30" value="5">
+                    </div>
+                    <div class="config-item">
+                        <label for="screenshot-interval">Screenshot Interval (sec)</label>
+                        <input type="number" id="screenshot-interval" min="5" max="300" value="30">
+                    </div>
+                    <button class="btn btn-primary" onclick="saveConfig()" style="width: 100%; margin-top: 10px;">
+                        Save Settings
+                    </button>
+                </div>
+
+                <div class="card">
+                    <h3>📧 Email Notifications</h3>
+                    <div class="config-item">
+                        <label>
+                            <input type="checkbox" id="email-enabled"> Enable Email Alerts
+                        </label>
+                    </div>
+                    <div class="config-item">
+                        <label for="email-server">SMTP Server</label>
+                        <input type="text" id="email-server" placeholder="smtp.gmail.com">
+                    </div>
+                    <div class="config-item">
+                        <label for="email-port">SMTP Port</label>
+                        <input type="number" id="email-port" placeholder="587">
+                    </div>
+                    <div class="config-item">
+                        <label for="email-username">Username</label>
+                        <input type="email" id="email-username" placeholder="your-email@gmail.com">
+                    </div>
+                    <div class="config-item">
+                        <label for="email-password">Password</label>
+                        <input type="password" id="email-password" placeholder="App Password">
+                    </div>
+                    <div class="config-item">
+                        <label for="email-recipient">Recipient</label>
+                        <input type="email" id="email-recipient" placeholder="recipient@example.com">
+                    </div>
+                    <div class="config-item">
+                        <label>
+                            <input type="checkbox" id="email-motion"> Send Motion Alerts
+                        </label>
+                    </div>
+                    <div class="config-item">
+                        <label>
+                            <input type="checkbox" id="email-no-motion"> Send No-Motion Alerts
+                        </label>
+                    </div>
+                    <button class="btn btn-primary" onclick="saveEmailConfig()" style="width: 100%; margin-top: 10px;">
+                        Save Email Settings
+                    </button>
+                </div>
+
+                <div class="card">
+                    <h3>📹 Recent Recordings</h3>
+                    <div class="recordings-list" id="recordings-list">
+                        <div class="loading">Loading recordings...</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📸 Screenshots</h3>
+                    <div class="recordings-list" id="screenshots-list">
+                        <div class="loading">Loading screenshots...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let statusInterval;
+        let recordingsInterval;
+        let isPageVisible = true;
+
+        // Initialize the interface
+        document.addEventListener('DOMContentLoaded', function () {
+            loadConfig();
+            loadEmailConfig();
+            startStatusUpdates();
+            loadRecordings();
+            loadScreenshots();
+
+            // Pause updates when page is not visible
+            document.addEventListener('visibilitychange', function () {
+                isPageVisible = !document.hidden;
+                if (isPageVisible) {
+                    startStatusUpdates();
+                } else {
+                    clearInterval(statusInterval);
+                    clearInterval(recordingsInterval);
+                }
+            });
+        });
+
+        function startStatusUpdates() {
+            if (statusInterval) clearInterval(statusInterval);
+            if (recordingsInterval) clearInterval(recordingsInterval);
+
+            statusInterval = setInterval(updateStatus, 3000);
+            recordingsInterval = setInterval(() => {
+                if (isPageVisible) {
+                    loadRecordings();
+                    loadScreenshots();
+                }
+            }, 15000);
+        }
+
+        async function updateStatus() {
+            if (!isPageVisible) return;
+
+            try {
+                const response = await fetch('/status', {
+                    cache: 'no-cache',
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+
+                if (!response.ok) return;
+
+                const data = await response.json();
+
+                const statusText = document.getElementById('status-text');
+                const statusIndicator = document.querySelector('.status-indicator');
+                const uptimeElement = document.getElementById('uptime');
+
+                if (data.recording) {
+                    statusText.textContent = 'Recording';
+                    statusIndicator.className = 'status-indicator status-recording';
+                } else if (data.motion_detected) {
+                    statusText.textContent = data.motion_status || 'Motion Detected';
+                    statusIndicator.className = 'status-indicator status-motion';
+                } else {
+                    statusText.textContent = data.motion_status || 'Live';
+                    statusIndicator.className = 'status-indicator status-live';
+                }
+
+                // Update uptime display
+                if (uptimeElement && data.uptime) {
+                    uptimeElement.textContent = data.uptime;
+                }
+            } catch (error) {
+                console.error('Failed to update status:', error);
+            }
+        }
+
+        async function loadConfig() {
+            try {
+                const response = await fetch('/config', {
+                    cache: 'no-cache'
+                });
+
+                if (!response.ok) return;
+
+                const config = await response.json();
+
+                const sensitivityEl = document.getElementById('sensitivity');
+                const durationEl = document.getElementById('recording-duration');
+                const cooldownEl = document.getElementById('cooldown');
+                const intervalEl = document.getElementById('screenshot-interval');
+
+                if (sensitivityEl) sensitivityEl.value = config.sensitivity || 0.3;
+                if (durationEl) durationEl.value = config.recording_duration || 10;
+                if (cooldownEl) cooldownEl.value = config.cooldown_period || 5;
+                if (intervalEl) intervalEl.value = config.screenshot_interval || 30;
+            } catch (error) {
+                console.error('Failed to load config:', error);
+            }
+        }
+
+        async function loadEmailConfig() {
+            try {
+                const response = await fetch('/config', {
+                    cache: 'no-cache'
+                });
+
+                if (!response.ok) return;
+
+                const config = await response.json();
+
+                if (config.email) {
+                    const emailEnabled = document.getElementById('email-enabled');
+                    const emailServer = document.getElementById('email-server');
+                    const emailPort = document.getElementById('email-port');
+                    const emailUsername = document.getElementById('email-username');
+                    const emailPassword = document.getElementById('email-password');
+                    const emailRecipient = document.getElementById('email-recipient');
+                    const emailMotion = document.getElementById('email-motion');
+                    const emailNoMotion = document.getElementById('email-no-motion');
+
+                    if (emailEnabled) emailEnabled.checked = config.email.enabled || false;
+                    if (emailServer) emailServer.value = config.email.smtp_server || '';
+                    if (emailPort) emailPort.value = config.email.smtp_port || '';
+                    if (emailUsername) emailUsername.value = config.email.username || '';
+                    if (emailPassword) emailPassword.value = config.email.password || '';
+                    if (emailRecipient) emailRecipient.value = config.email.recipient || '';
+                    if (emailMotion) emailMotion.checked = config.email.send_motion_alerts || false;
+                    if (emailNoMotion) emailNoMotion.checked = config.email.send_no_motion_alerts || false;
+                }
+            } catch (error) {
+                console.error('Failed to load email config:', error);
+            }
+        }
+
+        async function saveConfig() {
+            const config = {
+                sensitivity: parseFloat(document.getElementById('sensitivity').value),
+                recording_duration: parseInt(document.getElementById('recording-duration').value),
+                cooldown_period: parseInt(document.getElementById('cooldown').value),
+                screenshot_interval: parseInt(document.getElementById('screenshot-interval').value)
+            };
+
+            try {
+                const response = await fetch('/config', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(config)
+                });
+
+                if (response.ok) {
+                    alert('Configuration saved successfully!');
+                } else {
+                    alert('Failed to save configuration');
+                }
+            } catch (error) {
+                console.error('Failed to save config:', error);
+                alert('Error saving configuration');
+            }
+        }
+
+        async function saveEmailConfig() {
+            const emailConfig = {
+                email: {
+                    enabled: document.getElementById('email-enabled').checked,
+                    smtp_server: document.getElementById('email-server').value,
+                    smtp_port: parseInt(document.getElementById('email-port').value) || 587,
+                    username: document.getElementById('email-username').value,
+                    password: document.getElementById('email-password').value,
+                    recipient: document.getElementById('email-recipient').value,
+                    send_motion_alerts: document.getElementById('email-motion').checked,
+                    send_no_motion_alerts: document.getElementById('email-no-motion').checked
+                }
+            };
+
+            try {
+                const response = await fetch('/config', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(emailConfig)
+                });
+
+                if (response.ok) {
+                    alert('Email configuration saved successfully!');
+                } else {
+                    alert('Failed to save email configuration');
+                }
+            } catch (error) {
+                console.error('Failed to save email config:', error);
+                alert('Error saving email configuration');
+            }
+        }
+
+        async function loadRecordings() {
+            if (!isPageVisible) return;
+
+            try {
+                const response = await fetch('/recordings', {
+                    cache: 'no-cache'
+                });
+
+                if (!response.ok) return;
+
+                const recordings = await response.json();
+
+                const recordingsList = document.getElementById('recordings-list');
+                const recordingsCount = document.getElementById('recordings-count');
+
+                if (recordingsCount) recordingsCount.textContent = recordings.length;
+
+                if (recordings.length === 0) {
+                    if (recordingsList) recordingsList.innerHTML = '<div class="loading">No recordings yet</div>';
+                    return;
+                }
+
+                // Limit to last 10 recordings for performance
+                const recentRecordings = recordings.slice(-10);
+
+                if (recordingsList) {
+                    recordingsList.innerHTML = recentRecordings.map(recording => `
+                        <div class="recording-item">
+                            <div class="recording-info">
+                                <div class="recording-name">${recording.name}</div>
+                                <div class="recording-meta">
+                                    ${new Date(recording.created).toLocaleString()} • 
+                                    ${(recording.size / 1024 / 1024).toFixed(1)} MB
+                                    ${recording.thumbnail ? '<br><small>📷 Thumbnail available</small>' : ''}
+                                </div>
+                            </div>
+                            <div class="recording-actions">
+                                <button class="btn btn-small btn-primary" onclick="viewRecording('${recording.name}')">
+                                    View
+                                </button>
+                                <button class="btn btn-small btn-secondary" onclick="downloadRecording('${recording.name}')">
+                                    Download
+                                </button>
+                                ${recording.thumbnail ? `<button class="btn btn-small btn-secondary" onclick="viewThumbnail('${recording.thumbnail}')">Thumbnail</button>` : ''}
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Failed to load recordings:', error);
+                const recordingsList = document.getElementById('recordings-list');
+                if (recordingsList) {
+                    recordingsList.innerHTML = '<div class="error">Failed to load recordings</div>';
+                }
+            }
+        }
+
+        function viewRecording(filename) {
+            window.open(`/recording/${filename}`, '_blank');
+        }
+
+        function viewThumbnail(filename) {
+            window.open(`/thumbnail/${filename}`, '_blank');
+        }
+
+        function downloadRecording(filename) {
+            const link = document.createElement('a');
+            link.href = `/recording/${filename}`;
+            link.download = filename;
+            link.click();
+        }
+
+        async function loadScreenshots() {
+            if (!isPageVisible) return;
+
+            try {
+                const response = await fetch('/screenshots', {
+                    cache: 'no-cache'
+                });
+
+                if (!response.ok) return;
+
+                const screenshots = await response.json();
+
+                const screenshotsList = document.getElementById('screenshots-list');
+
+                if (screenshots.length === 0) {
+                    if (screenshotsList) screenshotsList.innerHTML = '<div class="loading">No screenshots yet</div>';
+                    return;
+                }
+
+                // Limit to last 10 screenshots for performance
+                const recentScreenshots = screenshots.slice(-10);
+
+                if (screenshotsList) {
+                    screenshotsList.innerHTML = recentScreenshots.map(screenshot => `
+                        <div class="recording-item">
+                            <div class="recording-info">
+                                <div class="recording-name">${screenshot.name}</div>
+                                <div class="recording-meta">
+                                    ${new Date(screenshot.created).toLocaleString()} • 
+                                    ${(screenshot.size / 1024).toFixed(1)} KB
+                                </div>
+                            </div>
+                            <div class="recording-actions">
+                                <button class="btn btn-small btn-primary" onclick="viewScreenshot('${screenshot.name}')">
+                                    View
+                                </button>
+                                <button class="btn btn-small btn-secondary" onclick="downloadScreenshot('${screenshot.name}')">
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Failed to load screenshots:', error);
+                const screenshotsList = document.getElementById('screenshots-list');
+                if (screenshotsList) {
+                    screenshotsList.innerHTML = '<div class="error">Failed to load screenshots</div>';
+                }
+            }
+        }
+
+        function viewScreenshot(filename) {
+            window.open(`/screenshot/${filename}`, '_blank');
+        }
+
+        function downloadScreenshot(filename) {
+            window.open(`/screenshot/${filename}`, '_blank');
+        }
+
+        function downloadLatest() {
+            // This would download the most recent recording
+            // Implementation depends on your file serving setup
+            alert('Download latest recording feature - implement as needed');
+        }
+
+        function toggleRecording() {
+            // This would toggle manual recording
+            alert('Manual recording toggle - implement as needed');
+        }
+
+        function refreshStatus() {
+            updateStatus();
+            loadRecordings();
+            loadScreenshots();
+        }
+
+        // Throttle function to limit API calls
+        function throttle(func, limit) {
+            let inThrottle;
+            return function () {
+                const args = arguments;
+                const context = this;
+                if (!inThrottle) {
+                    func.apply(context, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            }
+        }
+
+        // Clean up intervals when page unloads
+        window.addEventListener('beforeunload', function () {
+            if (statusInterval) clearInterval(statusInterval);
+            if (recordingsInterval) clearInterval(recordingsInterval);
+        });
+
+        // Add touch support for mobile devices
+        document.addEventListener('touchstart', function () { }, { passive: true });
+    </script>
+</body>
+
+</html>

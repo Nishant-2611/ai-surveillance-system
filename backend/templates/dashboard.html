@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SecureEye — Dashboard</title>
+  <meta name="description" content="SecureEye AI Smart Surveillance Dashboard — Live Alerts and Recordings" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body class="dashboard-body">
+
+  <!-- ── Header ── -->
+  <header class="header">
+    <div class="header-brand">
+      <svg class="header-brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+        <path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10S2 17.52 2 12z" stroke-dasharray="4 2"/>
+      </svg>
+      <span class="header-title">SecureEye</span>
+    </div>
+    <div class="header-right">
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        LIVE
+      </div>
+      <span id="lastUpdate">—</span>
+      <div class="user-badge">
+        <div class="user-badge-avatar" id="userAvatar">U</div>
+        <span id="userLabel">User</span>
+      </div>
+      <button class="btn-logout" onclick="logout()">Sign Out</button>
+    </div>
+  </header>
+
+  <!-- ── Stats Bar ── -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-icon teal">🚨</div>
+      <div>
+        <div class="stat-label">Total Alerts</div>
+        <div class="stat-value" id="statTotal">—</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon red">🔴</div>
+      <div>
+        <div class="stat-label">Unseen</div>
+        <div class="stat-value" id="statUnseen">—</div>
+      </div>
+      <div class="stat-badge" id="unseenBadge" style="display:none">NEW</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon yellow">🎥</div>
+      <div>
+        <div class="stat-label">Recordings</div>
+        <div class="stat-value" id="statRecordings">—</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon blue">🛡️</div>
+      <div>
+        <div class="stat-label">System</div>
+        <div class="stat-value" style="font-size:1rem;color:var(--accent)">ACTIVE</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Main Grid ── -->
+  <div class="main-grid">
+
+    <!-- Feed + Recordings Column -->
+    <div class="feed-col">
+
+      <!-- Live/Recent Feed -->
+      <div class="section-header">
+        <div class="section-title">
+          <div class="section-title-dot"></div>
+          📺 Live / Recent Feed
+        </div>
+        <span id="feedLabel" style="font-size:0.75rem;color:var(--text-3)">No feed yet</span>
+      </div>
+
+      <div class="feed-viewer" id="feedViewer">
+        <div class="feed-placeholder" id="feedPlaceholder">
+          <div class="feed-placeholder-icon">📷</div>
+          <p>Waiting for camera feed…</p>
+          <p style="font-size:0.75rem;margin-top:4px">Click an alert or send a Pi upload to view media</p>
+        </div>
+        <img id="feedImage" style="display:none;width:100%;height:100%;object-fit:contain;" alt="Live feed" />
+        <video id="feedVideo" controls style="display:none;width:100%;height:100%;"></video>
+      </div>
+
+      <div class="feed-info-bar" id="feedInfoBar">
+        <span class="feed-tag" id="feedTypeTag">—</span>
+        <span id="feedTimestamp" style="font-size:0.78rem;color:var(--text-2)">—</span>
+        <span class="feed-time" id="feedAlertId">—</span>
+      </div>
+
+      <!-- Recordings Gallery -->
+      <div class="recordings-section">
+        <div class="section-header">
+          <div class="section-title">
+            <div class="section-title-dot"></div>
+            ▶️ Recordings
+          </div>
+          <button style="font-size:0.75rem;color:var(--text-2);background:none;border:none;cursor:pointer;" onclick="loadRecordings()">↻ Refresh</button>
+        </div>
+        <div class="recordings-grid" id="recordingsGrid">
+          <p class="rec-no-media">Loading recordings…</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alerts Column -->
+    <div class="alerts-col">
+      <div class="section-header">
+        <div class="section-title">
+          <div class="section-title-dot"></div>
+          🚨 Alerts
+        </div>
+        <span style="font-size:0.72rem;color:var(--text-3)">Auto-refresh 5s</span>
+      </div>
+
+      <!-- Simulate Pi Button -->
+      <div class="sim-actions">
+        <button class="sim-btn" id="simBtn" onclick="simulateUpload()">
+          🤖 Simulate Pi Upload
+        </button>
+        <button class="sim-btn secondary" id="camBtn" onclick="captureLiveCamera()">
+          📸 Live Camera Alert
+        </button>
+      </div>
+
+      <div class="alerts-list" id="alertsList">
+        <p class="alerts-empty">Loading alerts…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Media Modal ── -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="modalTitle">Recording Viewer</span>
+        <button class="modal-close" onclick="closeModalDirect()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-media" id="modalMedia"></div>
+        <div class="modal-info" id="modalInfo"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>

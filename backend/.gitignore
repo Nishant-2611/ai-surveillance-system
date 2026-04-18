@@ -1,0 +1,54 @@
+# ======================
+# 🔐 ENVIRONMENT FILES
+# ======================
+.env
+.env.*
+*.env
+
+# ======================
+# 🔐 SECRET FILES
+# ======================
+secrets.json
+config.json
+*.pem
+*.key
+
+# ======================
+# 🐍 PYTHON (FLASK)
+# ======================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Flask instance folder
+instance/
+
+# ======================
+# ⚛️ REACT / NODE
+# ======================
+node_modules/
+build/
+dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ======================
+# 📦 SYSTEM FILES
+# ======================
+.DS_Store
+Thumbs.db
+
+# ======================
+# 🧪 OPTIONAL
+# ======================
+*.log
+*.sqlite3

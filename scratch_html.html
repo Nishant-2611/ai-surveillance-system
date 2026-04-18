@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SENTINEL_HUD | AI Smart Surveillance</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed-variant": "#004e60",
+                    "primary": "#a5e7ff",
+                    "primary-fixed-dim": "#47d6ff",
+                    "on-primary-fixed": "#001f28",
+                    "on-primary": "#003543",
+                    "surface-container-low": "#1c1b1d",
+                    "on-secondary-fixed": "#181c25",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary": "#680015",
+                    "on-primary-container": "#00566a",
+                    "surface-variant": "#353437",
+                    "secondary-fixed": "#dfe2ef",
+                    "error": "#ffb4ab",
+                    "surface-bright": "#39393b",
+                    "surface": "#131315",
+                    "error-container": "#93000a",
+                    "inverse-primary": "#00677f",
+                    "inverse-surface": "#e5e1e4",
+                    "surface-container-high": "#2a2a2c",
+                    "on-secondary": "#2c303a",
+                    "tertiary-fixed-dim": "#ffb3b3",
+                    "background": "#131315",
+                    "surface-container": "#201f21",
+                    "secondary": "#c3c6d3",
+                    "surface-container-lowest": "#0e0e10",
+                    "on-surface-variant": "#bbc9cf",
+                    "on-tertiary-fixed": "#400009",
+                    "secondary-fixed-dim": "#c3c6d3",
+                    "on-secondary-container": "#b5b8c5",
+                    "tertiary-fixed": "#ffdad9",
+                    "tertiary-container": "#ffabab",
+                    "on-error": "#690005",
+                    "on-background": "#e5e1e4",
+                    "on-surface": "#e5e1e4",
+                    "outline": "#859399",
+                    "surface-dim": "#131315",
+                    "surface-tint": "#47d6ff",
+                    "on-secondary-fixed-variant": "#434751",
+                    "inverse-on-surface": "#313032",
+                    "surface-container-highest": "#353437",
+                    "outline-variant": "#3c494e",
+                    "primary-container": "#00d2ff",
+                    "primary-fixed": "#b6ebff",
+                    "secondary-container": "#454953",
+                    "on-tertiary-fixed-variant": "#920021",
+                    "tertiary": "#ffd2d2",
+                    "on-tertiary-container": "#a20026"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: #131315;
+            color: #e5e1e4;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .hud-border-bracket {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: #00d2ff;
+            border-style: solid;
+        }
+    </style>
+</head>
+<body class="overflow-hidden">
+<!-- TopNavBar Shell -->
+<header class="flex justify-between items-center w-full px-6 h-16 fixed top-0 z-50 bg-[#131315]/80 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-[#a5e7ff] to-[#00d2ff] font-headline">Vision Shield</span>
+<div class="hidden md:flex items-center bg-surface-container px-4 py-1.5 rounded-lg border-b border-transparent focus-within:border-primary-container transition-all">
+<span class="material-symbols-outlined text-sm text-zinc-500 mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-xs font-headline tracking-widest text-on-surface p-0 w-64 uppercase" placeholder="SEARCH_SYSTEM..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative text-zinc-500 hover:text-white transition-colors duration-300 active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="text-zinc-500 hover:text-white transition-colors duration-300 active:scale-95">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="text-zinc-500 hover:text-white transition-colors duration-300 active:scale-95">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+</button>
+<div class="flex items-center gap-3 ml-4 border-l border-white/10 pl-6">
+<div class="text-right">
+<p class="text-[10px] font-headline font-bold text-primary tracking-widest">CHIEF INTEL</p>
+<p class="text-[8px] text-zinc-500 font-headline uppercase">CLEARANCE_L5</p>
+</div>
+<img alt="Chief Intelligence Officer" class="w-8 h-8 rounded-lg object-cover grayscale contrast-125 border border-primary/20" data-alt="high-detail portrait of a middle-aged security professional in a dark tactical uniform with clean military grooming" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU6KKQdreXLxJj6_6_3BxAONQh3PorrdASW32oET8pUULHPcrcHIdJ8pM5XQQ8JWkF_RQyg7ViqvH8wTS8cBzFpQo7U0mixJyzEU135ehro1MzJL2BrNitXS6QWIyeIcWvqra0y0kvCo2mHBDTSRp4Blpq-SCI69PgwrPD7-KMnUJLLyyydiQSm70_uF5a1dzex5d3omj5DFzIguvgDXUSo2Xz2Yf0pS3Bvny--_Iu1aM6EbI91_eX4y-ziOXEKVnGmJpxnUDJ6xo"/>
+</div>
+</div>
+</header>
+<div class="flex h-screen pt-16">
+<!-- SideNavBar Shell -->
+<aside class="flex flex-col h-full border-r border-zinc-800/50 bg-[#131315] h-screen w-64 fixed left-0 top-0 pt-20 z-40">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg">
+<div class="w-10 h-10 bg-primary-container/10 rounded flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div>
+<p class="font-headline text-xs font-bold uppercase tracking-widest text-primary">OPERATOR_01</p>
+<p class="font-headline text-[10px] text-zinc-500 tracking-tighter">CLEARANCE_LEVEL_5</p>
+</div>
+</div>
+</div>
+<nav class="flex-1">
+<a class="bg-gradient-to-r from-[#00d2ff]/10 to-transparent border-l-2 border-[#00d2ff] text-[#00d2ff] py-4 px-6 flex items-center gap-4 hover:translate-x-1 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">videocam</span>
+<span class="font-headline text-xs font-bold uppercase tracking-widest">Live Feed</span>
+</a>
+<a class="text-zinc-500 py-4 px-6 flex items-center gap-4 hover:bg-white/5 hover:text-zinc-200 transition-all duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined text-[20px]">settings_backup_restore</span>
+<span class="font-headline text-xs font-bold uppercase tracking-widest">Recordings</span>
+</a>
+<a class="text-zinc-500 py-4 px-6 flex items-center gap-4 hover:bg-white/5 hover:text-zinc-200 transition-all duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined text-[20px]">radar</span>
+<span class="font-headline text-xs font-bold uppercase tracking-widest">Threat Analysis</span>
+</a>
+<a class="text-zinc-500 py-4 px-6 flex items-center gap-4 hover:bg-white/5 hover:text-zinc-200 transition-all duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined text-[20px]">security</span>
+<span class="font-headline text-xs font-bold uppercase tracking-widest">System Config</span>
+</a>
+</nav>
+<div class="p-6">
+<button class="w-full py-3 bg-gradient-to-br from-[#a5e7ff] to-[#00d2ff] text-on-primary-fixed font-headline text-[10px] font-black tracking-[0.2em] rounded-sm active:scale-95 transition-transform">
+                    DEPLOY_DRONE
+                </button>
+</div>
+<div class="mt-auto border-t border-white/5">
+<a class="text-zinc-500 py-4 px-6 flex items-center gap-4 hover:bg-white/5 hover:text-zinc-200 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">help_outline</span>
+<span class="font-headline text-xs font-bold uppercase tracking-widest">Support</span>
+</a>
+<a class="text-zinc-500 py-4 px-6 flex items-center gap-4 hover:bg-white/5 hover:text-zinc-200 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="font-headline text-xs font-bold uppercase tracking-widest">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 flex-1 p-6 overflow-y-auto">
+<div class="flex flex-col lg:flex-row gap-6 h-full">
+<!-- Surveillance Main Module -->
+<div class="flex-[3] flex flex-col gap-6">
+<div class="relative bg-surface-container-low rounded-lg overflow-hidden flex-1 shadow-2xl border border-white/5">
+<!-- Camera Feed Image -->
+<div class="absolute inset-0 grayscale opacity-40 mix-blend-screen pointer-events-none">
+<div class="w-full h-full border border-primary/10"></div>
+</div>
+<img alt="Live Camera Feed" class="w-full h-full object-cover" data-alt="CCTV perspective of a high-security industrial hangar with metallic textures, dramatic blue industrial lighting, and visible sensor overlays" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpSXX_126PLnu3l7ipG2AjlWx8cp3cgPZ7fOvIt6n7LSw8JQOBAJsqRSvIqvyBVGRJu4psB4ipuO9udwU0iAWX-bnDRORuoRjCVIncBuAWE-HGaGlx-Kxg0H2P6nAhvq64vR76WdCwvrxUAGNKbl-ISYVu0XoGSbvxbZgQpIH47OXCHpPDdLORofUaN4TkmhyQT1ZUORTTffV5pCcGjzN4YC_VhBW4dTcg6F9QVDquM7aIUusgeKqZNLEhvwFrXgbRFhgAoWCri0k"/>
+<!-- HUD Overlays -->
+<div class="absolute inset-0 p-6 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="bg-black/60 backdrop-blur-md px-4 py-2 border-l-2 border-primary">
+<p class="font-headline text-[10px] text-primary tracking-[0.2em] font-bold">CAM_04 // NORTH_GATE</p>
+<p class="font-mono text-xl text-white font-light mt-1">2023.10.24 — 22:45:12:04</p>
+</div>
+<div class="flex gap-2">
+<span class="bg-error/20 text-error px-3 py-1 rounded-full text-[10px] font-headline font-bold flex items-center gap-2">
+<span class="w-2 h-2 bg-error rounded-full animate-pulse"></span> LIVE_FEED
+                                    </span>
+</div>
+</div>
+<!-- Detection Brackets (Asymmetric HUD elements) -->
+<div class="absolute top-1/3 left-1/4 w-32 h-40">
+<div class="hud-border-bracket top-0 left-0 border-t-2 border-l-2"></div>
+<div class="hud-border-bracket top-0 right-0 border-t-2 border-r-2"></div>
+<div class="hud-border-bracket bottom-0 left-0 border-b-2 border-l-2"></div>
+<div class="hud-border-bracket bottom-0 right-0 border-b-2 border-r-2"></div>
+<div class="absolute -top-6 left-0 bg-primary-container text-on-primary-fixed px-2 py-0.5 text-[8px] font-black font-headline tracking-widest">
+                                    SUBJECT_01_DETECTED
+                                </div>
+</div>
+<div class="flex justify-between items-end">
+<div class="flex gap-4">
+<div class="bg-black/40 backdrop-blur-md p-2 rounded flex items-center gap-6">
+<button class="material-symbols-outlined text-white hover:text-primary transition-colors">play_arrow</button>
+<button class="material-symbols-outlined text-white hover:text-primary transition-colors">pause</button>
+<div class="h-4 w-px bg-white/20"></div>
+<button class="material-symbols-outlined text-white hover:text-primary transition-colors">screenshot_region</button>
+<button class="material-symbols-outlined text-white hover:text-primary transition-colors">fullscreen</button>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline text-[10px] text-zinc-400 tracking-widest">FPS: 60.0</p>
+<p class="font-headline text-[10px] text-zinc-400 tracking-widest">LATENCY: 12ms</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Metrics Grid (Asymmetric) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-32">
+<div class="bg-surface-container px-6 py-4 rounded shadow-lg flex flex-col justify-between border-l border-primary/20">
+<p class="font-headline text-[10px] text-zinc-500 font-bold tracking-widest uppercase">Motion Events</p>
+<div class="flex items-baseline gap-2">
+<p class="text-3xl font-headline font-bold text-white tracking-tighter">42</p>
+<p class="text-primary text-[10px] font-headline font-bold">+12.5%</p>
+</div>
+</div>
+<div class="bg-surface-container px-6 py-4 rounded shadow-lg flex flex-col justify-between border-l border-zinc-800">
+<p class="font-headline text-[10px] text-zinc-500 font-bold tracking-widest uppercase">System Load</p>
+<div class="flex items-baseline gap-2">
+<p class="text-3xl font-headline font-bold text-white tracking-tighter">18%</p>
+<p class="text-zinc-500 text-[10px] font-headline font-bold">OPTIMAL</p>
+</div>
+</div>
+<div class="bg-surface-container-high px-6 py-4 rounded shadow-lg flex flex-col justify-between border-l-2 border-primary">
+<p class="font-headline text-[10px] text-primary font-bold tracking-widest uppercase">Neural Network</p>
+<div class="flex items-baseline gap-2">
+<p class="text-3xl font-headline font-bold text-white tracking-tighter">ONLINE</p>
+<p class="text-primary text-[10px] font-headline font-bold">v4.2.1</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Alerts Side Panel -->
+<div class="flex-[1] flex flex-col gap-6">
+<div class="bg-surface-container rounded-lg p-6 flex-1 shadow-xl border border-white/5 flex flex-col overflow-hidden">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline text-xs font-black tracking-[0.2em] text-white">REAL_TIME_ALERTS</h2>
+<span class="material-symbols-outlined text-zinc-600 text-sm">filter_list</span>
+</div>
+<div class="space-y-4 overflow-y-auto pr-2 custom-scrollbar flex-1">
+<!-- Alert High -->
+<div class="bg-surface-container-low p-4 border-l-4 border-error/50 hover:bg-surface-container-high transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[8px] font-headline font-black px-2 py-0.5 bg-error/20 text-error rounded-full tracking-widest uppercase">CRITICAL</span>
+<span class="text-[9px] font-headline text-zinc-500 uppercase tracking-widest">22:42:01</span>
+</div>
+<h3 class="text-xs font-headline font-bold text-on-surface mb-1 group-hover:text-error transition-colors">Zone Incursion Detected</h3>
+<p class="text-[10px] text-zinc-400 font-body leading-relaxed">Unauthorized subject identified in Section B-14 storage area.</p>
+</div>
+<!-- Alert Medium -->
+<div class="bg-surface-container-low p-4 border-l-4 border-tertiary-container/50 hover:bg-surface-container-high transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[8px] font-headline font-black px-2 py-0.5 bg-tertiary-container/20 text-tertiary-container rounded-full tracking-widest uppercase">WARNING</span>
+<span class="text-[9px] font-headline text-zinc-500 uppercase tracking-widest">22:38:45</span>
+</div>
+<h3 class="text-xs font-headline font-bold text-on-surface mb-1 group-hover:text-tertiary-container transition-colors">Camera Obscured</h3>
+<p class="text-[10px] text-zinc-400 font-body leading-relaxed">Visual feed from PERIMETER_WEST showing 45% occlusion.</p>
+</div>
+<!-- Alert Low -->
+<div class="bg-surface-container-low p-4 border-l-4 border-primary-container/50 hover:bg-surface-container-high transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[8px] font-headline font-black px-2 py-0.5 bg-primary-container/20 text-primary-container rounded-full tracking-widest uppercase">INFO</span>
+<span class="text-[9px] font-headline text-zinc-500 uppercase tracking-widest">22:30:12</span>
+</div>
+<h3 class="text-xs font-headline font-bold text-on-surface mb-1 group-hover:text-primary-container transition-colors">Motion Detected</h3>
+<p class="text-[10px] text-zinc-400 font-body leading-relaxed">Standard maintenance activity detected in Main Lobby.</p>
+</div>
+<!-- Alert Medium -->
+<div class="bg-surface-container-low p-4 border-l-4 border-tertiary-container/50 hover:bg-surface-container-high transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[8px] font-headline font-black px-2 py-0.5 bg-tertiary-container/20 text-tertiary-container rounded-full tracking-widest uppercase">WARNING</span>
+<span class="text-[9px] font-headline text-zinc-500 uppercase tracking-widest">22:25:55</span>
+</div>
+<h3 class="text-xs font-headline font-bold text-on-surface mb-1 group-hover:text-tertiary-container transition-colors">Door Unlocked Duration</h3>
+<p class="text-[10px] text-zinc-400 font-body leading-relaxed">Vault entrance 4-C has been open exceeding the safety threshold (300s).</p>
+</div>
+<!-- Alert Low -->
+<div class="bg-surface-container-low p-4 border-l-4 border-primary-container/50 hover:bg-surface-container-high transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[8px] font-headline font-black px-2 py-0.5 bg-primary-container/20 text-primary-container rounded-full tracking-widest uppercase">INFO</span>
+<span class="text-[9px] font-headline text-zinc-500 uppercase tracking-widest">22:12:00</span>
+</div>
+<h3 class="text-xs font-headline font-bold text-on-surface mb-1 group-hover:text-primary-container transition-colors">System Health Check</h3>
+<p class="text-[10px] text-zinc-400 font-body leading-relaxed">All sub-systems reporting nominal operational status.</p>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-white/5">
+<button class="w-full text-center text-[10px] font-headline font-bold text-zinc-500 hover:text-white transition-colors tracking-widest uppercase">View All Events</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

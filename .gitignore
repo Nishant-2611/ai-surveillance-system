@@ -1,0 +1,44 @@
+# Environment Variables
+.env
+.env.*
+*.env
+
+# Secrets
+secrete
+secrete.*
+secrets.json
+config.json
+*.pem
+*.key
+secret.key
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+venv/
+env/
+.venv/
+instance/
+
+# Node/React
+node_modules/
+build/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Databases
+*.sqlite3
+*.db
+surveillance.db
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/

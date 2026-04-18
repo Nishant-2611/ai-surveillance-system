@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SENTINEL_HUD | Archive</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed-variant": "#004e60",
+                    "primary": "#a5e7ff",
+                    "primary-fixed-dim": "#47d6ff",
+                    "on-primary-fixed": "#001f28",
+                    "on-primary": "#003543",
+                    "surface-container-low": "#1c1b1d",
+                    "on-secondary-fixed": "#181c25",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary": "#680015",
+                    "on-primary-container": "#00566a",
+                    "surface-variant": "#353437",
+                    "secondary-fixed": "#dfe2ef",
+                    "error": "#ffb4ab",
+                    "surface-bright": "#39393b",
+                    "surface": "#131315",
+                    "error-container": "#93000a",
+                    "inverse-primary": "#00677f",
+                    "inverse-surface": "#e5e1e4",
+                    "surface-container-high": "#2a2a2c",
+                    "on-secondary": "#2c303a",
+                    "tertiary-fixed-dim": "#ffb3b3",
+                    "background": "#131315",
+                    "surface-container": "#201f21",
+                    "secondary": "#c3c6d3",
+                    "surface-container-lowest": "#0e0e10",
+                    "on-surface-variant": "#bbc9cf",
+                    "on-tertiary-fixed": "#400009",
+                    "secondary-fixed-dim": "#c3c6d3",
+                    "on-secondary-container": "#b5b8c5",
+                    "tertiary-fixed": "#ffdad9",
+                    "tertiary-container": "#ffabab",
+                    "on-error": "#690005",
+                    "on-background": "#e5e1e4",
+                    "on-surface": "#e5e1e4",
+                    "outline": "#859399",
+                    "surface-dim": "#131315",
+                    "surface-tint": "#47d6ff",
+                    "on-secondary-fixed-variant": "#434751",
+                    "inverse-on-surface": "#313032",
+                    "surface-container-highest": "#353437",
+                    "outline-variant": "#3c494e",
+                    "primary-container": "#00d2ff",
+                    "primary-fixed": "#b6ebff",
+                    "secondary-container": "#454953",
+                    "on-tertiary-fixed-variant": "#920021",
+                    "tertiary": "#ffd2d2",
+                    "on-tertiary-container": "#a20026"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #131315; color: #e5e1e4; }
+        .font-headline { font-family: 'Space Grotesk', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { background: rgba(28, 27, 29, 0.7); backdrop-filter: blur(20px); }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #353437; border-radius: 10px; }
+    </style>
+</head>
+<body class="overflow-hidden">
+<!-- TopNavBar Shell -->
+<header class="flex justify-between items-center w-full px-6 h-16 fixed top-0 z-50 bg-[#131315]/80 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-[#a5e7ff] to-[#00d2ff] font-headline">SENTINEL_HUD</span>
+<div class="hidden md:flex items-center gap-1 bg-[#1c1b1d] rounded-lg px-3 py-1.5 group focus-within:ring-1 focus-within:ring-primary-container transition-all">
+<span class="material-symbols-outlined text-zinc-500 text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-xs font-headline uppercase tracking-wider text-zinc-300 w-48 placeholder-zinc-600" placeholder="QUERY_ARCHIVE..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-zinc-500 hover:bg-zinc-800/50 hover:text-white transition-colors duration-300 p-2 rounded-full active:scale-95 transition-transform">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-zinc-500 hover:bg-zinc-800/50 hover:text-white transition-colors duration-300 p-2 rounded-full active:scale-95 transition-transform">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="text-zinc-500 hover:bg-zinc-800/50 hover:text-white transition-colors duration-300 p-2 rounded-full active:scale-95 transition-transform">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-white/10 ml-2">
+<img class="w-full h-full object-cover" data-alt="Close up portrait of a professional intelligence officer with serious expression in high-tech environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgDS_8C2gDUHOFsCzDnhRz5jcK6ULO_8L2c6lB0fXAI8bpo2O-m5e4k_R3olnffGzDBRGJOYUdJXvXSaCfj9Af9m52z-cFOToxkaL6T8qj2kQNp_bwE2JTwiENWqfOBC__48ye7tQLKjOIzrWcwGa8HbMGC0bwLMSNqymoQxmrpG3LBa-x8O4y28Cpg6NqtzFXnWI9kJ3kI70o6Jk606WC1ot_aJcsAxBjSqX2051JeUJuefZIPxEVxF69uOgJokNy8_ZfxiuU0LM"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 pt-20 flex flex-col h-full border-r border-zinc-800/50 bg-[#131315] z-40 hidden md:flex">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-xl">
+<div class="w-10 h-10 rounded bg-gradient-to-br from-primary-container to-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">security</span>
+</div>
+<div>
+<p class="font-headline text-[10px] font-bold tracking-widest text-primary uppercase">OPERATOR_01</p>
+<p class="text-[9px] text-zinc-500 font-bold uppercase tracking-tighter">CLEARANCE_LEVEL_5</p>
+</div>
+</div>
+</div>
+<nav class="flex-1">
+<a class="text-zinc-500 py-4 px-6 flex items-center gap-4 hover:bg-white/5 hover:text-zinc-200 transition-all hover:translate-x-1 duration-200 font-headline text-xs font-bold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined">videocam</span> Live Feed
+            </a>
+<a class="bg-gradient-to-r from-[#00d2ff]/10 to-transparent border-l-2 border-[#00d2ff] text-[#00d2ff] py-4 px-6 flex items-center gap-4 transition-all font-headline text-xs font-bold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined">settings_backup_restore</span> Recordings
+            </a>
+<a class="text-zinc-500 py-4 px-6 flex items-center gap-4 hover:bg-white/5 hover:text-zinc-200 transition-all hover:translate-x-1 duration-200 font-headline text-xs font-bold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined">radar</span> Threat Analysis
+            </a>
+<a class="text-zinc-500 py-4 px-6 flex items-center gap-4 hover:bg-white/5 hover:text-zinc-200 transition-all hover:translate-x-1 duration-200 font-headline text-xs font-bold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined">security</span> System Config
+            </a>
+</nav>
+<div class="p-6 mt-auto flex flex-col gap-2">
+<button class="w-full py-3 bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline text-[10px] font-bold tracking-widest uppercase rounded-sm hover:brightness-110 active:scale-95 transition-all">
+                DEPLOY_DRONE
+            </button>
+<div class="mt-4 pt-4 border-t border-white/5">
+<a class="text-zinc-500 py-2 flex items-center gap-4 hover:text-zinc-200 transition-all font-headline text-[10px] font-bold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined text-sm">help_outline</span> Support
+                </a>
+<a class="text-zinc-500 py-2 flex items-center gap-4 hover:text-zinc-200 transition-all font-headline text-[10px] font-bold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined text-sm">logout</span> Logout
+                </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-16 h-screen flex flex-col overflow-hidden bg-surface">
+<!-- Header & Filters Area -->
+<section class="p-6 space-y-6">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div class="space-y-1">
+<h1 class="text-3xl font-headline font-bold tracking-tight text-on-background">RECORDING_ARCHIVE</h1>
+<p class="text-xs font-label text-on-surface-variant uppercase tracking-widest">System Timestamp: 2024-05-20 // Total Cycles: 1,492</p>
+</div>
+<div class="flex flex-wrap items-center gap-3">
+<div class="flex items-center bg-surface-container-low p-1 rounded-sm">
+<span class="px-3 py-1.5 text-[10px] font-headline font-bold text-primary bg-primary/10 tracking-widest uppercase rounded-sm">ALL_EVENTS</span>
+<span class="px-3 py-1.5 text-[10px] font-headline font-bold text-zinc-500 tracking-widest uppercase hover:text-zinc-300 cursor-pointer transition-colors">INTRUSION</span>
+<span class="px-3 py-1.5 text-[10px] font-headline font-bold text-zinc-500 tracking-widest uppercase hover:text-zinc-300 cursor-pointer transition-colors">FACE_ID</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-sm border border-outline-variant/10 cursor-pointer hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-primary text-sm">filter_list</span>
+<span class="text-[10px] font-headline font-bold text-on-surface-variant tracking-widest uppercase">FILTER_CHANNELS</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Secondary Grid Layout -->
+<section class="flex-1 flex flex-col md:flex-row overflow-hidden px-6 pb-6 gap-6">
+<!-- Calendar Component -->
+<div class="w-full md:w-80 flex flex-col gap-4">
+<div class="bg-surface-container-low rounded-lg p-6 flex-none border border-outline-variant/5">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline text-sm font-bold tracking-widest text-primary uppercase">MAY_2024</h3>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-zinc-500 cursor-pointer hover:text-white transition-colors">chevron_left</span>
+<span class="material-symbols-outlined text-zinc-500 cursor-pointer hover:text-white transition-colors">chevron_right</span>
+</div>
+</div>
+<div class="grid grid-cols-7 gap-y-4 text-center">
+<!-- Calendar Headers -->
+<div class="text-[10px] font-headline font-bold text-zinc-600 uppercase">S</div>
+<div class="text-[10px] font-headline font-bold text-zinc-600 uppercase">M</div>
+<div class="text-[10px] font-headline font-bold text-zinc-600 uppercase">T</div>
+<div class="text-[10px] font-headline font-bold text-zinc-600 uppercase">W</div>
+<div class="text-[10px] font-headline font-bold text-zinc-600 uppercase">T</div>
+<div class="text-[10px] font-headline font-bold text-zinc-600 uppercase">F</div>
+<div class="text-[10px] font-headline font-bold text-zinc-600 uppercase">S</div>
+<!-- Calendar Days (Mocked for May 20th active) -->
+<div class="text-[11px] font-body text-zinc-700 py-1">28</div>
+<div class="text-[11px] font-body text-zinc-700 py-1">29</div>
+<div class="text-[11px] font-body text-zinc-700 py-1">30</div>
+<div class="text-[11px] font-body text-zinc-400 py-1 hover:text-white cursor-pointer transition-colors">1</div>
+<div class="text-[11px] font-body text-zinc-400 py-1 hover:text-white cursor-pointer transition-colors">2</div>
+<div class="text-[11px] font-body text-zinc-400 py-1 hover:text-white cursor-pointer transition-colors">3</div>
+<div class="text-[11px] font-body text-zinc-400 py-1 hover:text-white cursor-pointer transition-colors">4</div>
+<!-- ... more days ... -->
+<div class="text-[11px] font-body text-zinc-400 py-1 hover:text-white cursor-pointer transition-colors">17</div>
+<div class="text-[11px] font-body text-zinc-400 py-1 hover:text-white cursor-pointer transition-colors">18</div>
+<div class="text-[11px] font-body text-zinc-400 py-1 hover:text-white cursor-pointer transition-colors">19</div>
+<div class="text-[11px] font-headline font-bold text-on-primary-fixed bg-primary-container/90 py-1 rounded-sm shadow-[0_0_12px_rgba(0,210,255,0.3)]">20</div>
+<div class="text-[11px] font-body text-zinc-400 py-1 hover:text-white cursor-pointer transition-colors">21</div>
+<div class="text-[11px] font-body text-zinc-400 py-1 hover:text-white cursor-pointer transition-colors">22</div>
+<div class="text-[11px] font-body text-zinc-400 py-1 hover:text-white cursor-pointer transition-colors">23</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest flex-1 rounded-lg p-6 border border-outline-variant/5 overflow-hidden flex flex-col">
+<h3 class="font-headline text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-4">TIME_RANGE_SELECTOR</h3>
+<div class="space-y-4 overflow-y-auto custom-scrollbar flex-1 pr-2">
+<div class="group cursor-pointer">
+<div class="flex justify-between text-[10px] font-headline font-bold tracking-widest mb-1 group-hover:text-primary transition-colors">
+<span>00:00 - 06:00</span>
+<span class="text-zinc-600">12 FILES</span>
+</div>
+<div class="h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-zinc-700 group-hover:bg-primary-container transition-all" style="width: 15%"></div>
+</div>
+</div>
+<div class="group cursor-pointer">
+<div class="flex justify-between text-[10px] font-headline font-bold tracking-widest mb-1 text-primary">
+<span>06:00 - 12:00</span>
+<span>45 FILES</span>
+</div>
+<div class="h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary-container shadow-[0_0_8px_rgba(0,210,255,0.5)] transition-all" style="width: 65%"></div>
+</div>
+</div>
+<div class="group cursor-pointer">
+<div class="flex justify-between text-[10px] font-headline font-bold tracking-widest mb-1 group-hover:text-primary transition-colors">
+<span>12:00 - 18:00</span>
+<span class="text-zinc-600">82 FILES</span>
+</div>
+<div class="h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-zinc-700 group-hover:bg-primary-container transition-all" style="width: 85%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Video Grid Area -->
+<div class="flex-1 bg-surface-container-low rounded-lg p-6 border border-outline-variant/5 overflow-y-auto custom-scrollbar">
+<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Recording Card 1 -->
+<div class="bg-surface-container-high rounded-sm group overflow-hidden relative border border-transparent hover:border-primary-container/20 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
+<div class="aspect-video relative overflow-hidden bg-black">
+<img class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 grayscale hover:grayscale-0" data-alt="Grainy CCTV night vision footage of a secure parking garage with harsh fluorescent lighting and dark shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEc_oMwNJgF-ajEZhxc5NuRjWkpPNq0NVa2NYk-F6C6yrwNS6XasjqHKwQJFlHiThyWObNS1vDXlgowZ90ooUdISdtzb9lH6XOXOA8N7B7QOkRo5Aj0hKTtvFo37ZD0yfktAUrWPwubdaLtlOSI6K8_frOszZK4rZxDCWXJR6D6OICENSw_9txadYMgfyt34ChpaOcHfk715PApq7JIBq0BBdG1ZwUzgqxuqnlVVjtfoJmB0C6s0_NR8Ds1VX6ARjMOlSvs9yQIB4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute top-2 left-2 flex gap-1">
+<span class="bg-tertiary-container/20 backdrop-blur-md text-tertiary-container text-[8px] font-headline font-bold px-2 py-0.5 rounded-full border border-tertiary-container/30 uppercase tracking-widest">Intrusion</span>
+<span class="bg-black/40 backdrop-blur-md text-zinc-300 text-[8px] font-headline font-bold px-2 py-0.5 rounded-full border border-white/5 uppercase tracking-widest">Cam_04</span>
+</div>
+<div class="absolute bottom-2 right-2 bg-black/60 px-1.5 py-0.5 rounded-sm text-[10px] font-headline font-bold text-white uppercase tracking-tighter">
+                                04:22
+                            </div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-12 h-12 rounded-full bg-primary-container/90 text-on-primary-container flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline text-xs font-bold tracking-widest text-on-surface uppercase">Sector_Alpha_Main</h4>
+<p class="text-[10px] font-body text-zinc-500 uppercase tracking-tighter">May 20, 2024 | 08:45:12 AM</p>
+</div>
+<span class="material-symbols-outlined text-zinc-500 text-sm cursor-pointer hover:text-primary transition-colors">more_vert</span>
+</div>
+<div class="flex gap-2 pt-2 border-t border-white/5">
+<button class="flex-1 bg-surface-container-lowest text-[10px] font-headline font-bold text-zinc-400 py-2 uppercase tracking-widest rounded-sm hover:bg-surface-container-highest hover:text-white transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xs">download</span> SAVE_RAW
+                                </button>
+<button class="flex-1 bg-primary/5 text-[10px] font-headline font-bold text-primary py-2 uppercase tracking-widest rounded-sm hover:bg-primary/10 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xs">analytics</span> AI_LOG
+                                </button>
+</div>
+</div>
+</div>
+<!-- Recording Card 2 -->
+<div class="bg-surface-container-high rounded-sm group overflow-hidden relative border border-transparent hover:border-primary-container/20 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
+<div class="aspect-video relative overflow-hidden bg-black">
+<img class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 grayscale hover:grayscale-0" data-alt="Security monitor showing high-angle view of a corporate office lobby with glass walls and minimalist furniture at night" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-z6zcoyR4vWiG55ZpkhnFDrISqtOIVS2-WPJx3NbFLw3mz7AmgnbREel3iBd863CeknA8hcCPxLsgwbPG3yI3Kocr_JGoy33cdzDuQBIb-QCer3TLs8BWVne4qKZu7Z3T2kJijxu9t7FKlI2g3-5TJVNPq1A9o14ASPFys6R2XebshxuGij5P0v64ApXhO1o7K3PDUYIGVqeHdV7oBRNFpWT9v7vXLfq7kShMrSLh_r_bvgjILGaPrksIrqUx6HmiOcNa3N0pAFU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute top-2 left-2 flex gap-1">
+<span class="bg-primary-container/20 backdrop-blur-md text-primary-container text-[8px] font-headline font-bold px-2 py-0.5 rounded-full border border-primary-container/30 uppercase tracking-widest">Face_ID</span>
+<span class="bg-black/40 backdrop-blur-md text-zinc-300 text-[8px] font-headline font-bold px-2 py-0.5 rounded-full border border-white/5 uppercase tracking-widest">Cam_12</span>
+</div>
+<div class="absolute bottom-2 right-2 bg-black/60 px-1.5 py-0.5 rounded-sm text-[10px] font-headline font-bold text-white uppercase tracking-tighter">
+                                01:15
+                            </div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-12 h-12 rounded-full bg-primary-container/90 text-on-primary-container flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline text-xs font-bold tracking-widest text-on-surface uppercase">Lobby_West_Gate</h4>
+<p class="text-[10px] font-body text-zinc-500 uppercase tracking-tighter">May 20, 2024 | 09:12:05 AM</p>
+</div>
+<span class="material-symbols-outlined text-zinc-500 text-sm cursor-pointer hover:text-primary transition-colors">more_vert</span>
+</div>
+<div class="flex gap-2 pt-2 border-t border-white/5">
+<button class="flex-1 bg-surface-container-lowest text-[10px] font-headline font-bold text-zinc-400 py-2 uppercase tracking-widest rounded-sm hover:bg-surface-container-highest hover:text-white transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xs">download</span> SAVE_RAW
+                                </button>
+<button class="flex-1 bg-primary/5 text-[10px] font-headline font-bold text-primary py-2 uppercase tracking-widest rounded-sm hover:bg-primary/10 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xs">analytics</span> AI_LOG
+                                </button>
+</div>
+</div>
+</div>
+<!-- Recording Card 3 -->
+<div class="bg-surface-container-high rounded-sm group overflow-hidden relative border border-transparent hover:border-primary-container/20 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
+<div class="aspect-video relative overflow-hidden bg-black">
+<img class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 grayscale hover:grayscale-0" data-alt="Fisheye lens security view of a server room with blue LED indicator lights and metallic racks in a dark environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYSdr0WwmdEsOrA9tl4kzH_sOUBp_QpTP9zAF-7QMZWyR4jvP8DcEmn5hRbA8HeRWlVGfZaH5szNsV6HFzOnfHx9MuP4UjU42q0Zr2Rdn8uZArZhkp9e8LLiwT2lhcfQ_jNF8kQYyMD-een8kJEsXKqesOIGQtMoSk2lN4QNBOdM_JFsEiQEKTQs8GyKgIyeuPdtc92jw4inNt-8Ui0eRmXVFswoyBF9RSKHKDruyOIO7ABXUjdq2kRrfVfK_EuBGaGREEREFSXAw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute top-2 left-2 flex gap-1">
+<span class="bg-zinc-500/20 backdrop-blur-md text-zinc-300 text-[8px] font-headline font-bold px-2 py-0.5 rounded-full border border-white/10 uppercase tracking-widest">Normal</span>
+<span class="bg-black/40 backdrop-blur-md text-zinc-300 text-[8px] font-headline font-bold px-2 py-0.5 rounded-full border border-white/5 uppercase tracking-widest">Cam_01</span>
+</div>
+<div class="absolute bottom-2 right-2 bg-black/60 px-1.5 py-0.5 rounded-sm text-[10px] font-headline font-bold text-white uppercase tracking-tighter">
+                                12:45
+                            </div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-12 h-12 rounded-full bg-primary-container/90 text-on-primary-container flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline text-xs font-bold tracking-widest text-on-surface uppercase">Vault_Core_Z</h4>
+<p class="text-[10px] font-body text-zinc-500 uppercase tracking-tighter">May 20, 2024 | 10:30:00 AM</p>
+</div>
+<span class="material-symbols-outlined text-zinc-500 text-sm cursor-pointer hover:text-primary transition-colors">more_vert</span>
+</div>
+<div class="flex gap-2 pt-2 border-t border-white/5">
+<button class="flex-1 bg-surface-container-lowest text-[10px] font-headline font-bold text-zinc-400 py-2 uppercase tracking-widest rounded-sm hover:bg-surface-container-highest hover:text-white transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xs">download</span> SAVE_RAW
+                                </button>
+<button class="flex-1 bg-primary/5 text-[10px] font-headline font-bold text-primary py-2 uppercase tracking-widest rounded-sm hover:bg-primary/10 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xs">analytics</span> AI_LOG
+                                </button>
+</div>
+</div>
+</div>
+<!-- Repeat cards for layout density -->
+<div class="bg-surface-container-high rounded-sm group overflow-hidden relative border border-transparent hover:border-primary-container/20 transition-all duration-300 opacity-60 hover:opacity-100">
+<div class="aspect-video relative overflow-hidden bg-black flex items-center justify-center">
+<span class="material-symbols-outlined text-zinc-800 text-5xl">cloud_sync</span>
+<div class="absolute top-2 left-2">
+<span class="bg-black/40 text-zinc-600 text-[8px] font-headline font-bold px-2 py-0.5 rounded-full border border-white/5 uppercase tracking-widest">Cam_08</span>
+</div>
+</div>
+<div class="p-4">
+<h4 class="font-headline text-xs font-bold tracking-widest text-zinc-600 uppercase">Peripheral_Wall_North</h4>
+<p class="text-[10px] font-body text-zinc-700 uppercase tracking-tighter">Processing Signal...</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface-container-low/90 backdrop-blur-xl flex items-center justify-around px-6 z-50">
+<button class="flex flex-col items-center gap-1 text-zinc-500">
+<span class="material-symbols-outlined">videocam</span>
+<span class="text-[8px] font-headline font-bold uppercase">Live</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary drop-shadow-[0_0_8px_rgba(0,210,255,0.5)]">
+<span class="material-symbols-outlined">settings_backup_restore</span>
+<span class="text-[8px] font-headline font-bold uppercase">Record</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-zinc-500">
+<span class="material-symbols-outlined">radar</span>
+<span class="text-[8px] font-headline font-bold uppercase">Threat</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-zinc-500">
+<span class="material-symbols-outlined">security</span>
+<span class="text-[8px] font-headline font-bold uppercase">Config</span>
+</button>
+</nav>
+</body></html>
